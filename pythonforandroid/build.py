@@ -228,8 +228,11 @@ class Context(object):
             error('You probably want to build with --arch=armeabi-v7a instead')
             exit(1)
 
-        android = sh.Command(join(sdk_dir, 'tools', 'android'))
-        targets = android('list').stdout.decode('utf-8').split('\n')
+        # android = sh.Command(join(sdk_dir, 'tools', 'android'))
+        #  android command was deprecated and removed in Android SDK Tools Revision 25.3.0 (Feb 2017)
+        avdmanager = sh.Command(join(sdk_dir, 'tools', 'bin', 'avdmanager'))
+        # targets = android('list').stdout.decode('utf-8').split('\n')
+        targets = avdmanager('list').stdout.decode('utf-8').split('\n')
         apis = [s for s in targets if re.match(r'^ *API level: ', s)]
         apis = [re.findall(r'[0-9]+', s) for s in apis]
         apis = [int(s[0]) for s in apis if s]
